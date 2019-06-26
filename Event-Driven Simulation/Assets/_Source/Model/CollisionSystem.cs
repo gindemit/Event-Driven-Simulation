@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Assets._Source
+namespace Assets._Source.Model
 {
     public class CollisionSystem
     {
@@ -23,7 +23,7 @@ namespace Assets._Source
         /// Simulates the system of particles for the specified amount of time.
         /// </summary>
         /// <param name="limit">the amount of time</param>
-        public void Simulate(double limit)
+        public void Simulate(double limit, double hz)
         {
             if (_pq == null)
             {
@@ -51,7 +51,7 @@ namespace Assets._Source
             if (a != null && b != null) a.BounceOff(b);              // particle-particle collision
             else if (a != null && b == null) a.BounceOffVerticalWall();   // particle-wall collision
             else if (a == null && b != null) b.BounceOffHorizontalWall(); // particle-wall collision
-            else if (a == null && b == null) Redraw(limit);               // redraw event
+            else if (a == null && b == null) Redraw(limit, hz);               // redraw event
 
             // update the priority queue with new collisions involving a or b
             Predict(a, limit);
@@ -88,7 +88,7 @@ namespace Assets._Source
         }
 
         // redraw all particles
-        private void Redraw(double limit)
+        private void Redraw(double limit, double hz)
         {
             //StdDraw.clear();
             //for (int i = 0; i < particles.length; i++)
@@ -97,10 +97,10 @@ namespace Assets._Source
             //}
             //StdDraw.show();
             //StdDraw.pause(20);
-            //if (t < limit)
-            //{
-            //    pq.insert(new Event(t + 1.0 / HZ, null, null));
-            //}
+            if (_t < limit)
+            {
+                _pq.Insert(new Event(_t + 1.0 / hz, null, null));
+            }
         }
 
 

@@ -1,4 +1,4 @@
-﻿namespace Assets._Source
+﻿namespace Assets._Source.Model
 {
 public static class RandomExtensionMethods
 {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Assets._Source
+namespace Assets._Source.Model
 {
     public class MinPQ<TKey> : IEnumerable<TKey>
     {

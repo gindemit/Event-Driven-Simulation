@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 
-namespace Assets._Source
+namespace Assets._Source.Model
 {
     public class Particle
     {
         private static readonly double Infinity = double.PositiveInfinity;
 
-        private double _rx, _ry; // position
+        internal double _rx { get; private set; } //TODO: to Vector2
+        internal double _ry { get; private set; }
         private double _vx, _vy; // velocity
         private int _count; // number of collisions so far
-        private readonly double _radius; // radius
+        internal double _radius { get; } // radius
         private readonly double _mass; // mass
         private readonly Color _color; // color
 
@@ -40,9 +41,8 @@ namespace Assets._Source
         /// The position is uniform in the unit box; the velocity in
         /// either direciton is chosen uniformly at random.
         /// </summary>
-        public Particle()
+        public Particle(System.Random random)
         {
-            var random = new System.Random();
             _rx = random.NextDoubleRange(0.0, 1.0);
             _ry = random.NextDoubleRange(0.0f, 1.0f);
             _vx = random.NextDoubleRange(-0.005f, 0.005f);
@@ -61,14 +61,6 @@ namespace Assets._Source
         {
             _rx += _vx * dt;
             _ry += _vy * dt;
-        }
-
-        /// <summary>
-        /// Draws this particle to standard draw.
-        /// </summary>
-        public void Draw()
-        {
-            throw new System.NotImplementedException();
         }
 
         /// <summary>
