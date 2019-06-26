@@ -11,7 +11,7 @@ namespace Assets._Source.View
         {
             _model = particle;
             _transform = transform;
-            _transform.localScale = Vector3.one * (float)_model._radius;
+            _transform.localScale = Vector3.one * 2 * (float)_model._radius;
         }
 
         internal void DoUpdate()

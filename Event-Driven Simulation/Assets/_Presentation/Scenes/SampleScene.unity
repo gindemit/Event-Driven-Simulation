@@ -339,4 +339,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _particlePrefab: {fileID: 2155135955307438606, guid: 0d8356115e14ee7438a6ca88b566a4b7,
     type: 3}
-  _particlesToCreate: 100
+  _particlesToCreate: 7
+  _hz: 0.5

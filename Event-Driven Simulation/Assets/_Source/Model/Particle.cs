@@ -45,10 +45,10 @@ namespace Assets._Source.Model
         {
             _rx = random.NextDoubleRange(0.0, 1.0);
             _ry = random.NextDoubleRange(0.0f, 1.0f);
-            _vx = random.NextDoubleRange(-0.005f, 0.005f);
-            _vy = random.NextDoubleRange(-0.005f, 0.005f);
-            _radius = 0.02;
-            _mass = 0.5;
+            _vx = random.NextDoubleRange(-0.01f, 0.01f);
+            _vy = random.NextDoubleRange(-0.01f, 0.01f);
+            _radius = random.NextDoubleRange(0.01f, 0.07f);
+            _mass = _radius * 10.0;
             _color = Color.black;
         }
 
