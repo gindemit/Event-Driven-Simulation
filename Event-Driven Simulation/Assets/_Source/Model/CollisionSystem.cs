@@ -115,7 +115,7 @@ namespace Assets._Source.Model
          *    -  a and b both not null:  binary collision between a and b
          *
          ***************************************************************************/
-        private class Event : IComparable<Event>
+        private struct Event : IComparable<Event>
         {
             internal readonly double Time;         // time that event is scheduled to occur
             internal readonly Particle A, B;       // particles involved in event, possibly null
