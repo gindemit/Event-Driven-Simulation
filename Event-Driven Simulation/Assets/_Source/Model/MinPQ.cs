@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Assets._Source.Model
 {
     public class MinPQ<TKey> : IEnumerable<TKey>
+        where TKey : IComparable<TKey>
     {
         private readonly Comparer<TKey> mComparator; // optional comparator
         private TKey[] _keys; // store items at indices 1 to _n
@@ -176,7 +177,7 @@ namespace Assets._Source.Model
         {
             if (mComparator == null)
             {
-                return ((IComparable<TKey>) _keys[i]).CompareTo(_keys[j]) > 0;
+                return (_keys[i]).CompareTo(_keys[j]) > 0;
             }
             else
             {
