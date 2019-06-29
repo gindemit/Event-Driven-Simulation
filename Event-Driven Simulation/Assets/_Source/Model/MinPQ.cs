@@ -11,21 +11,30 @@ namespace Assets._Source.Model
         private TKey[] _keys; // store items at indices 1 to _n
         private int _n; // number of items on priority queue
 
-        /// <summary>
-        /// Initializes an empty priority queue with the given initial capacity.
-        /// </summary>
-        /// <param name="initCapacity">the initial capacity of this priority queue</param>
-        public MinPQ(int initCapacity)
-        {
-            _keys = new TKey[initCapacity + 1];
-            _n = 0;
-        }
 
         /// <summary>
         /// Initializes an empty priority queue.
         /// </summary>
         public MinPQ()
-            : this(1)
+            : this(1, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes an empty priority queue with the given initial capacity.
+        /// </summary>
+        /// <param name="initCapacity">the initial capacity of this priority queue</param>
+        public MinPQ(int initCapacity)
+            : this(initCapacity, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes an empty priority queue using the given comparator. 
+        /// </summary>
+        /// <param name="comparator">comparator the order in which to compare the keys</param>
+        public MinPQ(Comparer<TKey> comparator)
+            : this(1, comparator)
         {
         }
 
@@ -40,15 +49,6 @@ namespace Assets._Source.Model
             mComparator = comparator;
             _keys = new TKey[initCapacity + 1];
             _n = 0;
-        }
-
-        /// <summary>
-        /// Initializes an empty priority queue using the given comparator. 
-        /// </summary>
-        /// <param name="comparator">comparator the order in which to compare the keys</param>
-        public MinPQ(Comparer<TKey> comparator)
-            : this(1, comparator)
-        {
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Assets._Source.Model
         {
             if (mComparator == null)
             {
-                return (_keys[i]).CompareTo(_keys[j]) > 0;
+                return _keys[i].CompareTo(_keys[j]) > 0;
             }
             else
             {
