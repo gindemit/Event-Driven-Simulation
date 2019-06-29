@@ -1,12 +1,11 @@
 ﻿using System;
 
-
 namespace Assets._Source.Model
 {
-    public class CollisionSystem
+    public sealed partial class CollisionSystem
     {
         private MinPQ<Event> _pq; // the priority queue
-        private double _t = 0.0; // simulation clock time
+        private double _t; // simulation clock time
         private Particle[] _particles; // the array of particles
 
         /// <summary>
@@ -102,54 +101,6 @@ namespace Assets._Source.Model
                 _pq.Insert(new Event(_t + 1.0 / hz, null, null));
             }
         }
-
-
-        /***************************************************************************
-         *  An event during a particle collision simulation. Each event contains
-         *  the time at which it will occur (assuming no supervening actions)
-         *  and the particles a and b involved.
-         *
-         *    -  a and b both null:      redraw event
-         *    -  a null, b not null:     collision with vertical wall
-         *    -  a not null, b null:     collision with horizontal wall
-         *    -  a and b both not null:  binary collision between a and b
-         *
-         ***************************************************************************/
-        private struct Event : IComparable<Event>
-        {
-            internal readonly double Time;         // time that event is scheduled to occur
-            internal readonly Particle A, B;       // particles involved in event, possibly null
-            internal readonly int CountA, CountB;  // collision counts at event creation
-
-
-            // create a new event to occur at time t involving a and b
-            public Event(double t, Particle a, Particle b)
-            {
-                Time = t;
-                A = a;
-                B = b;
-                if (a != null) CountA = a.GetCount();
-                else CountA = -1;
-                if (b != null) CountB = b.GetCount();
-                else CountB = -1;
-            }
-
-            // compare times when two events will occur
-            public int CompareTo(Event that)
-            {
-                return Time.CompareTo(that.Time);
-            }
-
-            // has any collision occurred between when event was created and now?
-            public bool IsValid()
-            {
-                if (A != null && A.GetCount() != CountA) return false;
-                if (B != null && B.GetCount() != CountB) return false;
-                return true;
-            }
-
-        }
-
 
         /**
          * Unit tests the {@code CollisionSystem} data type.
