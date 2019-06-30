@@ -16,7 +16,7 @@ namespace Assets._Source.View
 
         internal void DoUpdate()
         {
-            _transform.localPosition = new Vector3((float)_model._rx, 0, (float)_model._ry);
+            _transform.localPosition = new Vector3((float)_model._rx, (float)_model._radius, (float)_model._ry);
         }
     }
 }
