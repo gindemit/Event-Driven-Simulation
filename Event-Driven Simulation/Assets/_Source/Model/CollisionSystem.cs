@@ -6,7 +6,7 @@ namespace Assets._Source.Model
     {
         private MinPQ<Event> _pq; // the priority queue
         private double _t; // simulation clock time
-        private Particle[] _particles; // the array of particles
+        private readonly Particle[] _particles; // the array of particles
 
         /// <summary>
         /// Initializes a system with the specified collection of particles.
@@ -47,10 +47,22 @@ namespace Assets._Source.Model
             _t = e.Time;
 
             // process event
-            if (a != null && b != null) a.BounceOff(b);              // particle-particle collision
-            else if (a != null && b == null) a.BounceOffVerticalWall();   // particle-wall collision
-            else if (a == null && b != null) b.BounceOffHorizontalWall(); // particle-wall collision
-            else if (a == null && b == null) Redraw(limit, hz);               // redraw event
+            if (a != null && b != null)
+            {
+                a.BounceOff(b);              // particle-particle collision
+            }
+            else if (a != null && b == null)
+            {
+                a.BounceOffVerticalWall();   // particle-wall collision
+            }
+            else if (a == null && b != null)
+            {
+                b.BounceOffHorizontalWall(); // particle-wall collision
+            }
+            else if (a == null && b == null)
+            {
+                Redraw(limit, hz);               // redraw event
+            }
 
             // update the priority queue with new collisions involving a or b
             Predict(a, limit);
@@ -69,7 +81,10 @@ namespace Assets._Source.Model
         // updates priority queue with all new events for particle a
         private void Predict(Particle a, double limit)
         {
-            if (a == null) return;
+            if (a == null)
+            {
+                return;
+            }
 
             // particle-particle collisions
             for (int i = 0; i < _particles.Length; i++)
@@ -82,8 +97,14 @@ namespace Assets._Source.Model
             // particle-wall collisions
             double dtX = a.TimeToHitVerticalWall();
             double dtY = a.TimeToHitHorizontalWall();
-            if (_t + dtX <= limit) _pq.Insert(new Event(_t + dtX, a, null));
-            if (_t + dtY <= limit) _pq.Insert(new Event(_t + dtY, null, a));
+            if (_t + dtX <= limit)
+            {
+                _pq.Insert(new Event(_t + dtX, a, null));
+            }
+            if (_t + dtY <= limit)
+            {
+                _pq.Insert(new Event(_t + dtY, null, a));
+            }
         }
 
         // redraw all particles
