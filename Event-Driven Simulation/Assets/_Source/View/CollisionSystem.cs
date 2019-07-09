@@ -31,7 +31,7 @@ namespace Assets._Source.View
             _model = new Model.CollisionSystem(particleModels);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _model.Simulate(10000, _hz);
             for (int i = 0; i < _particleViews.Length; ++i)
