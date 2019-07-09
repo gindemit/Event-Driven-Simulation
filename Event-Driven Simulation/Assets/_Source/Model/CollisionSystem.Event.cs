@@ -20,7 +20,8 @@ namespace Assets._Source.Model
         {
             internal readonly double Time;         // time that event is scheduled to occur
             internal readonly Particle A, B;       // particles involved in event, possibly null
-            internal readonly int CountA, CountB;  // collision counts at event creation
+            private readonly int _countA;  // collision counts at event creation
+            private readonly int _countB;  // collision counts at event creation
 
 
             // create a new event to occur at time t involving a and b
@@ -29,10 +30,10 @@ namespace Assets._Source.Model
                 Time = t;
                 A = a;
                 B = b;
-                if (a != null) CountA = a.GetCount();
-                else CountA = -1;
-                if (b != null) CountB = b.GetCount();
-                else CountB = -1;
+                if (a != null) _countA = a.GetCount();
+                else _countA = -1;
+                if (b != null) _countB = b.GetCount();
+                else _countB = -1;
             }
 
             // compare times when two events will occur
@@ -44,8 +45,8 @@ namespace Assets._Source.Model
             // has any collision occurred between when event was created and now?
             public bool IsValid()
             {
-                if (A != null && A.GetCount() != CountA) return false;
-                if (B != null && B.GetCount() != CountB) return false;
+                if (A != null && A.GetCount() != _countA) return false;
+                if (B != null && B.GetCount() != _countB) return false;
                 return true;
             }
         }
