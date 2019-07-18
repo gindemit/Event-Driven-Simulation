@@ -29,11 +29,11 @@ namespace Assets._Source.View
 
 
             _model = new Model.CollisionSystem(particleModels);
+            StartCoroutine(_model.Simulate(10000, _hz));
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            _model.Simulate(10000, _hz);
             for (int i = 0; i < _particleViews.Length; ++i)
             {
                 _particleViews[i].DoUpdate();

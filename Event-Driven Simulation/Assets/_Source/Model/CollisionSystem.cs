@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Assets._Source.Model
 {
     public sealed partial class CollisionSystem
     {
+        private static WaitForSeconds sWaitForSeconds = new WaitForSeconds(0.02f);
+
         private MinPQ<Event> _pq; // the priority queue
         private double _t; // simulation clock time
         private readonly Particle[] _particles; // the array of particles
@@ -22,51 +26,47 @@ namespace Assets._Source.Model
         /// Simulates the system of particles for the specified amount of time.
         /// </summary>
         /// <param name="limit">the amount of time</param>
-        public void Simulate(double limit, double hz)
+        public IEnumerator Simulate(double limit, double hz)
         {
-            if (_pq == null)
-            {
-                Start(limit);
-            }
+            Start(limit);
 
-            if (_pq.IsEmpty())
+            while (!_pq.IsEmpty())
             {
-                return;
-            }
+                // get impending event, discard if invalidated
+                Event e = _pq.DelMin();
+                if (!e.IsValid())
+                    continue;
+                Particle a = e.A;
+                Particle b = e.B;
 
-            // get impending event, discard if invalidated
-            Event e = _pq.DelMin();
-            if (!e.IsValid())
-                return;
-            Particle a = e.A;
-            Particle b = e.B;
+                // physical collision, so update positions, and then simulation clock
+                for (int i = 0; i < _particles.Length; i++)
+                    _particles[i].Move(e.Time - _t);
+                _t = e.Time;
 
-            // physical collision, so update positions, and then simulation clock
-            for (int i = 0; i < _particles.Length; i++)
-                _particles[i].Move(e.Time - _t);
-            _t = e.Time;
+                // process event
+                if (a != null && b != null)
+                {
+                    a.BounceOff(b); // particle-particle collision
+                }
+                else if (a != null && b == null)
+                {
+                    a.BounceOffVerticalWall(); // particle-wall collision
+                }
+                else if (a == null && b != null)
+                {
+                    b.BounceOffHorizontalWall(); // particle-wall collision
+                }
+                else if (a == null && b == null)
+                {
+                    yield return sWaitForSeconds;
+                    Redraw(limit, hz); // redraw event
+                }
 
-            // process event
-            if (a != null && b != null)
-            {
-                a.BounceOff(b);              // particle-particle collision
+                // update the priority queue with new collisions involving a or b
+                Predict(a, limit);
+                Predict(b, limit);
             }
-            else if (a != null && b == null)
-            {
-                a.BounceOffVerticalWall();   // particle-wall collision
-            }
-            else if (a == null && b != null)
-            {
-                b.BounceOffHorizontalWall(); // particle-wall collision
-            }
-            else if (a == null && b == null)
-            {
-                Redraw(limit, hz);               // redraw event
-            }
-
-            // update the priority queue with new collisions involving a or b
-            Predict(a, limit);
-            Predict(b, limit);
         }
         private void Start(double limit)
         {
